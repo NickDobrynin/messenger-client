@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import React, {useState} from 'react';
-import {useMutation} from '@apollo/client';
+import {useApolloClient, useMutation} from '@apollo/client';
 import SEND_MESSAGE from '../../../apollo/api/sendMessage';
 import {Chat} from '../../../../types';
 import GET_CHATS from '../../../apollo/api/getChats';
