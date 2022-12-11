@@ -42,7 +42,9 @@ function App() {
     client.resetStore();
   };
 
-  if (isLoading) return <Preloader />;
+  console.log(isLoading);
+
+  if (true || isLoading) return <Preloader />;
   return (
     <AppWrapper>
       <Routes>
