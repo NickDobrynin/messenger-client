@@ -51,25 +51,25 @@ const ChatInput: React.FC<IChatInput> = ({chatId, to}) => {
             })]
           }
         })
-        await sendMessage({
-          variables: {
-            message: inputValue,
-            to,
-            chatId
-          },
-          update: (cache, {data: {sendMessage}}) => {
-            const currentChats = cache.readQuery<IChats>({query: GET_CHATS})!.getChats;
-            cache.writeQuery({
-              query: GET_CHATS,
-              data: {
-                getChats: [...currentChats.map((chat: Chat) => {
-                  if (chat.id === sendMessage.id) return sendMessage;
-                  else return chat;
-                })]
-              },
-            })
-          },
-        });
+        // await sendMessage({
+        //   variables: {
+        //     message: inputValue,
+        //     to,
+        //     chatId
+        //   },
+        //   update: (cache, {data: {sendMessage}}) => {
+        //     const currentChats = cache.readQuery<IChats>({query: GET_CHATS})!.getChats;
+        //     cache.writeQuery({
+        //       query: GET_CHATS,
+        //       data: {
+        //         getChats: [...currentChats.map((chat: Chat) => {
+        //           if (chat.id === sendMessage.id) return sendMessage;
+        //           else return chat;
+        //         })]
+        //       },
+        //     })
+        //   },
+        // });
         setInputValue('');
       }
     }
