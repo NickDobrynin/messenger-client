@@ -31,6 +31,7 @@ interface IChatInput {
 }
 
 const ChatInput: React.FC<IChatInput> = ({chatId, to}) => {
+  const client = useApolloClient();
   const [sendMessage] = useMutation(SEND_MESSAGE);
   const [inputValue, setInputValue] = useState<string>('');
   const onInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -40,6 +41,16 @@ const ChatInput: React.FC<IChatInput> = ({chatId, to}) => {
   const onSubmit = async (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
       if (inputValue.trim()) {
+        const currentChats = client.readQuery<IChats>({query: GET_CHATS})!.getChats;
+        client.writeQuery({
+          query: GET_CHATS,
+          data: {
+            gerChats: [...currentChats.map((chat: Chat) => {
+              if (chat.id === chatId) return {...chat, messages: [...chat.messages, {message: inputValue}]}
+              else return chat;
+            })]
+          }
+        })
         await sendMessage({
           variables: {
             message: inputValue,
