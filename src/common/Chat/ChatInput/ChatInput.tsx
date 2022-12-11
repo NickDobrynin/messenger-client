@@ -46,7 +46,10 @@ const ChatInput: React.FC<IChatInput> = ({chatId, to}) => {
           query: GET_CHATS,
           data: {
             gerChats: [...currentChats.map((chat: Chat) => {
-              if (chat.id === chatId) return {...chat, messages: [...chat.messages, {message: inputValue}]}
+              if (chat.id === chatId) {
+                console.log({...chat, messages: [...chat.messages, {message: inputValue}]})
+                return {...chat, messages: [...chat.messages, {message: inputValue}]}
+              }
               else return chat;
             })]
           }
