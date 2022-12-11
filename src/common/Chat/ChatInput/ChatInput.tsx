@@ -1,9 +1,10 @@
 import styled from 'styled-components';
 import React, {useState} from 'react';
-import {useApolloClient, useMutation} from '@apollo/client';
+import {useApolloClient, useMutation, useQuery} from '@apollo/client';
 import SEND_MESSAGE from '../../../apollo/api/sendMessage';
 import {Chat} from '../../../../types';
 import GET_CHATS from '../../../apollo/api/getChats';
+import GET_USER from '../../../apollo/api/getUser';
 
 const Input = styled.input`
   width: 100%;
@@ -31,6 +32,7 @@ interface IChatInput {
 }
 
 const ChatInput: React.FC<IChatInput> = ({chatId, to}) => {
+  const user = useQuery(GET_USER);
   const client = useApolloClient();
   const [sendMessage] = useMutation(SEND_MESSAGE);
   const [inputValue, setInputValue] = useState<string>('');
@@ -47,8 +49,18 @@ const ChatInput: React.FC<IChatInput> = ({chatId, to}) => {
           data: {
             gerChats: [...currentChats.map((chat: Chat) => {
               if (chat.id === chatId) {
-                console.log({...chat, messages: [...chat.messages, {message: inputValue}]})
-                return {...chat, messages: [...chat.messages, {message: inputValue}]}
+                console.log({...chat, messages: [...chat.messages, {
+                  __typename: 'Message',
+                  id: ++chat.messages.length,
+                  from: user && user?.data?.getUser?.username,
+                  message: inputValue
+                }]})
+                return {...chat, messages: [...chat.messages, {...chat, messages: [...chat.messages, {
+                      __typename: 'Message',
+                      id: ++chat.messages.length,
+                      from: user && user?.data?.getUser?.username,
+                      message: inputValue
+                    }]}]}
               }
               else return chat;
             })]
