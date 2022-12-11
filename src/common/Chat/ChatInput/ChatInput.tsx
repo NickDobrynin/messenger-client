@@ -16,7 +16,6 @@ const Input = styled.input`
   border-radius: 1.25rem;
   transition: border-color .3s ease;
   padding: 0 1rem;
-
   &:focus {
     border-color: #6E00FF;
   }
